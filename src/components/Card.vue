@@ -21,5 +21,6 @@ export default {
 <style>
 .card {
   width: 300px;
+  flex-shrink: 0;
 }
 </style>
