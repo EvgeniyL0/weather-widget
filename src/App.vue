@@ -82,8 +82,10 @@ export default {
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
   width: 320px;
   height: 400px;
+  padding-top: 20px;
   align-items: center;
   position: relative;
   overflow: hidden;
@@ -106,15 +108,17 @@ export default {
 }
 
 .app__button_back {
+  height: 100%;
   position: absolute;
   left: 0;
-  top: 180px;
+  top: 0;
   z-index: 1;
 }
 
 .app__button_forward {
+  height: 100%;
   position: absolute;
-  top: 180px;
+  top: 0;
   right: 0;
   z-index: 1;
 }
@@ -123,6 +127,7 @@ export default {
   position: absolute;
   top: 10px;
   right: 0;
+  z-index: 2;
 }
 
 .app__icon {
