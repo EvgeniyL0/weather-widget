@@ -33,7 +33,8 @@
     </ul>
     <form class="popup__form" @submit.prevent="addNewLocation">
       <fieldset>
-        <input class="popup__input" type="text" v-model="newCity" />
+        <label for="location">Add location:</label>
+        <input class="popup__input" type="text" name="location" v-model="newCity" />
         <p class="popup__not-found-text" v-if="notFound">City not found :(</p>
       </fieldset>
       <button class="popup__button" type="submit" :disabled="newCity === ''">
@@ -121,6 +122,7 @@ export default {
 
 .popup__title {
   font-size: 16px;
+  font-weight: normal;
   margin-left: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -144,8 +146,8 @@ export default {
 }
 
 .popup__list {
-  width: 90%;
-  height: 70%;
+  width: 80%;
+  height: 60%;
   padding: 0;
   margin-left: auto;
   margin-top: 20px;
@@ -168,25 +170,34 @@ export default {
   cursor: move;
 }
 
-.popup__list-item_selected {
-  opacity: 0.7;
-}
-
 .popup__form {
-  height: 30px;
   display: flex;
   justify-content: center;
+  align-items: flex-end;
 }
 
 .popup__form fieldset {
+  display: flex;
+  flex-direction: column;
   padding: 0;
   border: none;
 }
 
+.popup__form fieldset label {
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+
 .popup__input {
-  margin-right: 5px;
+  box-sizing: border-box;
+  width: 200px;
+  height: 30px;
   border-radius: 2px;
   border: 1px solid;
+}
+
+.popup__input:focus {
+  border-color: #1E90FF;
 }
 
 .popup__not-found-text {
