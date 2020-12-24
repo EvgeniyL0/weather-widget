@@ -7,6 +7,7 @@
     >
       <img class="app__icon" src="./assets/images/back-icon.svg" alt="" />
     </button>
+    <loader v-if="loading" />
     <p class="app__error-text" v-if="loadErr">Loading error :(</p>
     <div
       class="app__cards-container"
@@ -33,15 +34,18 @@
 import { defaultCoords } from "./assets/constants.js";
 import Card from "./components/Card.vue";
 import Popup from "./components/Popup.vue";
+import Loader from "./components/Loader.vue";
 
 export default {
   name: "App",
   components: {
     Card,
     Popup,
+    Loader,
   },
   data() {
     return {
+      loading: false,
       loadErr: false,
       showConfig: false,
       shift: 20,
@@ -72,6 +76,7 @@ export default {
       this.shift = 20;
     },
     getWeatherForCurrentLocation() {
+      const data = this.$data;
       const store = this.$store;
 
       const success = async function (position) {
@@ -80,8 +85,12 @@ export default {
             lat: position.coords.latitude,
             lon: position.coords.longitude,
           })
+          .then(() => {
+            data.loading = false;
+          })
           .catch((err) => {
-            this.loadErr = true;
+            data.loading = false;
+            data.loadErr = true;
             console.log(err);
           });
       };
@@ -89,13 +98,18 @@ export default {
       const error = async function () {
         await store
           .dispatch("getWeatherByCoords", defaultCoords)
+          .then(() => {
+            data.loading = false;
+          })
           .catch((err) => {
-            this.loadErr = true;
+            data.loading = false;
+            data.loadErr = true;
             console.log(err);
           });
       };
 
       this.loadErr = false;
+      this.loading = true;
       if (!navigator.geolocation) {
         console.log("Geolocation is not supported by your browser");
       } else {
@@ -106,14 +120,21 @@ export default {
   created() {
     const IDs = JSON.parse(localStorage.getItem("cityIDs"));
 
-    if (IDs === undefined) {
-      this.getWeatherForCurrentLocation();
-    } else {
+    if (IDs) {
       this.loadErr = false;
-      this.$store.dispatch("getWeatherByIDs", IDs.join(",")).catch((err) => {
-        this.loadErr = true;
-        console.log(err);
-      });
+      this.loading = true;
+      this.$store
+        .dispatch("getWeatherByIDs", IDs.join(","))
+        .then(() => {
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.loadErr = true;
+          console.log(err);
+        });
+    } else {
+      this.getWeatherForCurrentLocation();
     }
   },
 };
@@ -125,8 +146,10 @@ export default {
   box-sizing: border-box;
   width: 320px;
   height: 400px;
-  padding-top: 20px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
   background-color: white;
 }
@@ -138,6 +161,7 @@ export default {
 
 .app__cards-container {
   position: absolute;
+  top: 50px;
   display: flex;
 }
 
