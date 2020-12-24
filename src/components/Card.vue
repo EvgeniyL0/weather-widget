@@ -3,7 +3,7 @@
     <h1 class="card__title">{{ data.name }}, {{ data.sys.country }}</h1>
     <div class="card__image">
       <img
-        :src="`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`"
+        :src="`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`"
         alt
       />
       <h2 class="card__subtitle">{{ data.main.temp }}°C</h2>
