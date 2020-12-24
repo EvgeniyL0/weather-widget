@@ -2,18 +2,9 @@
   <div class="popup">
     <h1 class="popup__title">Settings</h1>
     <button class="popup__button popup__button_close" @click="closePopup">
-      <img
-        class="popup__icon popup__icon_close"
-        src="../assets/images/close-icon.svg"
-        alt
-      />
+      <img class="popup__icon popup__icon_close" src="../assets/images/close-icon.svg" alt />
     </button>
-    <ul
-      class="popup__list"
-      @drop="onDrop($event)"
-      @dragover.prevent
-      @dragenter.prevent
-    >
+    <ul class="popup__list" @drop="onDrop($event)" @dragover.prevent @dragenter.prevent>
       <li
         class="popup__list-item"
         v-for="(city, index) in cities"
@@ -23,10 +14,7 @@
         draggable="true"
       >
         <span>{{ city }}</span>
-        <button
-          class="popup__button popup__button_del"
-          @click="deleteLocation(index)"
-        >
+        <button class="popup__button popup__button_del" @click="deleteLocation(index)">
           <img class="popup__icon" src="../assets/images/trash-icon.svg" alt />
         </button>
       </li>
@@ -53,15 +41,15 @@ export default {
       movingItem: "",
       movingIndex: "",
       targetItem: "",
-      targetIndex: "",
+      targetIndex: ""
     };
   },
   computed: {
     cities() {
-      return this.$store.state.locations.map((item) => {
+      return this.$store.state.locations.map(item => {
         return item.name;
       });
-    },
+    }
   },
   methods: {
     addNewLocation() {
@@ -71,7 +59,7 @@ export default {
         .then(() => {
           this.newCity = "";
         })
-        .catch((err) => {
+        .catch(err => {
           this.notFound = true;
           console.log(err);
         });
@@ -90,22 +78,22 @@ export default {
     onDrop(event) {
       this.$store.commit("changeItem", {
         index: this.movingIndex,
-        item: this.currentItem,
+        item: this.currentItem
       });
       this.$store.commit("changeItem", {
         index: this.currentIndex,
-        item: this.movingItem,
+        item: this.movingItem
       });
     },
     closePopup() {
-      const cityIDs = this.$store.state.locations.map((item) => {
+      const cityIDs = this.$store.state.locations.map(item => {
         return item.id;
       });
 
       localStorage.setItem("cityIDs", JSON.stringify(cityIDs));
       this.$emit("closePopup");
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -191,13 +179,15 @@ export default {
 .popup__input {
   box-sizing: border-box;
   width: 200px;
-  height: 30px;
+  height: 25px;
+  margin-right: 5px;
   border-radius: 2px;
   border: 1px solid;
 }
 
 .popup__input:focus {
-  border-color: #1E90FF;
+  outline: none;
+  box-shadow: 0 0 0 3px #1e90ff;
 }
 
 .popup__not-found-text {

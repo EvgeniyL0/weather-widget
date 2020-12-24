@@ -5,15 +5,11 @@
       @click="shift += shiftStep"
       :disabled="shift == 20"
     >
-      <img class="app__icon" src="./assets/images/back-icon.svg" alt="" />
+      <img class="app__icon" src="./assets/images/back-icon.svg" alt />
     </button>
     <loader v-if="loading" />
     <p class="app__error-text" v-if="loadErr">Loading error :(</p>
-    <div
-      class="app__cards-container"
-      v-if="!loadErr"
-      :style="{ left: shift + 'px' }"
-    >
+    <div class="app__cards-container" v-if="!loadErr" :style="{ left: shift + 'px' }">
       <card v-for="(item, index) in locations" :key="index" :data="item" />
     </div>
     <button
@@ -21,27 +17,29 @@
       @click="shift -= shiftStep"
       :disabled="Math.abs(shift) >= maxshift"
     >
-      <img class="app__icon" src="./assets/images/forward-icon.svg" alt="" />
+      <img class="app__icon" src="./assets/images/forward-icon.svg" alt />
     </button>
     <button class="app__button app__button_config" @click="showConfig = true">
-      <img class="app__icon" src="./assets/images/config-icon.svg" alt="" />
+      <img class="app__icon" src="./assets/images/config-icon.svg" alt />
     </button>
     <popup v-show="showConfig" @closePopup="closeConfig" />
   </div>
 </template>
 
 <script>
+import store from "./store";
 import { defaultCoords } from "./assets/constants.js";
 import Card from "./components/Card.vue";
 import Popup from "./components/Popup.vue";
 import Loader from "./components/Loader.vue";
 
 export default {
+  store,
   name: "App",
   components: {
     Card,
     Popup,
-    Loader,
+    Loader
   },
   data() {
     return {
@@ -50,7 +48,7 @@ export default {
       showConfig: false,
       shift: 20,
       shiftStep: 300,
-      maxWidth: 320,
+      maxWidth: 320
     };
   },
   computed: {
@@ -68,7 +66,7 @@ export default {
           this.$store.state.locations.length * this.shiftStep - this.maxWidth
         );
       }
-    },
+    }
   },
   methods: {
     closeConfig() {
@@ -79,29 +77,29 @@ export default {
       const data = this.$data;
       const store = this.$store;
 
-      const success = async function (position) {
+      const success = async function(position) {
         await store
           .dispatch("getWeatherByCoords", {
             lat: position.coords.latitude,
-            lon: position.coords.longitude,
+            lon: position.coords.longitude
           })
           .then(() => {
             data.loading = false;
           })
-          .catch((err) => {
+          .catch(err => {
             data.loading = false;
             data.loadErr = true;
             console.log(err);
           });
       };
 
-      const error = async function () {
+      const error = async function() {
         await store
           .dispatch("getWeatherByCoords", defaultCoords)
           .then(() => {
             data.loading = false;
           })
-          .catch((err) => {
+          .catch(err => {
             data.loading = false;
             data.loadErr = true;
             console.log(err);
@@ -115,7 +113,7 @@ export default {
       } else {
         navigator.geolocation.getCurrentPosition(success, error);
       }
-    },
+    }
   },
   created() {
     const IDs = JSON.parse(localStorage.getItem("cityIDs"));
@@ -128,7 +126,7 @@ export default {
         .then(() => {
           this.loading = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.loadErr = true;
           console.log(err);
@@ -136,7 +134,7 @@ export default {
     } else {
       this.getWeatherForCurrentLocation();
     }
-  },
+  }
 };
 </script>
 
