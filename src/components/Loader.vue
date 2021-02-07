@@ -2,7 +2,9 @@
   <div class="loader"></div>
 </template>
 
-<style>
+<style lang="scss">
+@import "./src/assets/styles/_constants";
+
 @keyframes rotation {
   from {
     transform: rotate(0deg);
@@ -16,7 +18,7 @@
   width: 40px;
   height: 40px;
   margin: 0;
-  border: 2px solid #f5f5f5;
+  border: 2px solid $back-color;
   border-radius: 100%;
   border-left-color: #d3d3d3;
   animation: rotation 1s linear infinite;

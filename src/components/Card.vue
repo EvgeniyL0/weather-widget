@@ -2,7 +2,10 @@
   <div class="card">
     <h1 class="card__title">{{ data.name }}, {{ data.sys.country }}</h1>
     <div class="card__image">
-      <img :src="`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`" alt />
+      <img
+        :src="`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`"
+        alt
+      />
       <h2 class="card__subtitle">{{ data.main.temp }}°C</h2>
     </div>
     <div class="card__text">
@@ -19,11 +22,13 @@
 
 <script>
 export default {
-  props: ["data"]
+  props: {
+    data: Object,
+  },
 };
 </script>
 
-<style>
+<style lang="scss">
 .card {
   width: 280px;
   padding-left: 20px;

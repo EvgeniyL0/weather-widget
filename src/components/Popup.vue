@@ -1,39 +1,28 @@
 <template>
   <div class="popup">
     <h1 class="popup__title">Settings</h1>
-    <button class="popup__button popup__button_close" @click="closePopup">
-      <img class="popup__icon popup__icon_close" src="../assets/images/close-icon.svg" alt />
+    <button class="popup__button_close" @click="closePopup">
+      <img class="popup__button-icon" src="../assets/images/close-icon.svg" alt />
     </button>
-    <ul class="popup__list" @drop="onDrop($event)" @dragover.prevent @dragenter.prevent>
-      <li
-        class="popup__list-item"
-        v-for="(city, index) in cities"
-        :key="index"
-        @dragstart="onDragStart(city, index)"
-        @dragover="onDragOver(city, index)"
-        draggable="true"
-      >
-        <span>{{ city }}</span>
-        <button class="popup__button popup__button_del" @click="deleteLocation(index)">
-          <img class="popup__icon" src="../assets/images/trash-icon.svg" alt />
-        </button>
-      </li>
-    </ul>
+    <cities-list :listItems="cities" @deleteItem="deleteLocation" />
     <form class="popup__form" @submit.prevent="addNewLocation">
       <fieldset>
         <label for="location">Add location:</label>
-        <input class="popup__input" type="text" name="location" v-model="newCity" />
-        <p class="popup__not-found-text" v-if="notFound">City not found :(</p>
+        <input type="text" name="location" v-model="newCity" />
+        <p v-if="notFound">City not found :(</p>
       </fieldset>
-      <button class="popup__button" type="submit" :disabled="newCity === ''">
-        <img class="popup__icon" src="../assets/images/confirm-icon.svg" alt />
+      <button class="popup__button_submit" type="submit" :disabled="newCity === ''">
+        <img class="popup__button-icon" src="../assets/images/confirm-icon.svg" alt />
       </button>
     </form>
   </div>
 </template>
 
 <script>
+import CitiesList from "./CitiesList.vue";
+
 export default {
+  components: { CitiesList },
   data() {
     return {
       newCity: "",
@@ -41,15 +30,15 @@ export default {
       movingItem: "",
       movingIndex: "",
       targetItem: "",
-      targetIndex: ""
+      targetIndex: "",
     };
   },
   computed: {
     cities() {
-      return this.$store.state.locations.map(item => {
+      return this.$store.state.locations.map((item) => {
         return item.name;
       });
-    }
+    },
   },
   methods: {
     addNewLocation() {
@@ -59,7 +48,7 @@ export default {
         .then(() => {
           this.newCity = "";
         })
-        .catch(err => {
+        .catch((err) => {
           this.notFound = true;
           console.log(err);
         });
@@ -67,37 +56,21 @@ export default {
     deleteLocation(index) {
       this.$store.commit("deleteItem", index);
     },
-    onDragStart(item, index) {
-      this.movingItem = this.$store.getters.getLocation(item);
-      this.movingIndex = index;
-    },
-    onDragOver(item, index) {
-      this.currentItem = this.$store.getters.getLocation(item);
-      this.currentIndex = index;
-    },
-    onDrop(event) {
-      this.$store.commit("changeItem", {
-        index: this.movingIndex,
-        item: this.currentItem
-      });
-      this.$store.commit("changeItem", {
-        index: this.currentIndex,
-        item: this.movingItem
-      });
-    },
     closePopup() {
-      const cityIDs = this.$store.state.locations.map(item => {
+      const cityIDs = this.$store.state.locations.map((item) => {
         return item.id;
       });
 
       localStorage.setItem("cityIDs", JSON.stringify(cityIDs));
       this.$emit("closePopup");
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "./src/assets/styles/_blocks";
+
 .popup {
   position: absolute;
   left: 0;
@@ -109,96 +82,59 @@ export default {
 }
 
 .popup__title {
-  font-size: 16px;
-  font-weight: normal;
-  margin-left: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.popup__button {
-  padding: 0;
-  background-color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.popup__button_close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.popup__button_del {
-  background-color: #f5f5f5;
-}
-
-.popup__list {
-  width: 80%;
-  height: 60%;
-  padding: 0;
-  margin-left: auto;
-  margin-top: 20px;
-  margin-right: auto;
-  margin-bottom: 20px;
-  overflow-y: auto;
-  list-style: none;
-}
-
-.popup__list-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 30px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin-bottom: 10px;
-  border-radius: 2px;
-  background-color: #f5f5f5;
-  cursor: move;
-}
+    font-size: 16px;
+    font-weight: normal;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
 .popup__form {
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border: none;
+    label {
+      font-weight: normal;
+      margin-bottom: 5px;
+    }
+    p {
+      margin-top: 5px;
+      margin-bottom: 0;
+      font-size: 14px;
+      text-align: center;
+    }
+  }
+  input {
+    box-sizing: border-box;
+    width: 200px;
+    height: 25px;
+    margin-right: 5px;
+    border-radius: 2px;
+    border: 1px solid;
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px #1e90ff;
+    }
+  }
 }
 
-.popup__form fieldset {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  border: none;
+.popup__button_close {
+  @extend button;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
-.popup__form fieldset label {
-  font-weight: normal;
-  margin-bottom: 5px;
+.popup__button_submit {
+  @extend button;
 }
 
-.popup__input {
-  box-sizing: border-box;
-  width: 200px;
-  height: 25px;
-  margin-right: 5px;
-  border-radius: 2px;
-  border: 1px solid;
-}
-
-.popup__input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px #1e90ff;
-}
-
-.popup__not-found-text {
-  margin-top: 5px;
-  margin-bottom: 0;
-  font-size: 14px;
-  text-align: center;
-}
-
-.popup__icon {
-  width: 20px;
-  height: 20px;
+.popup__button-icon {
+  @extend icon;
 }
 </style>

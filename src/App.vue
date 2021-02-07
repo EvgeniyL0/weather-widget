@@ -1,26 +1,34 @@
 <template>
   <div id="app">
     <button
-      class="app__button app__button_slide app__button_slide_back"
+      class="app__button_slide_back"
       @click="shift += shiftStep"
       :disabled="shift == 20"
     >
-      <img class="app__icon" src="./assets/images/back-icon.svg" alt />
+      <img class="app__button-icon" src="./assets/images/back-icon.svg" alt />
     </button>
     <loader v-if="loading" />
     <p class="app__error-text" v-if="loadErr">Loading error :(</p>
-    <div class="app__cards-container" v-if="!loadErr" :style="{ left: shift + 'px' }">
+    <div
+      class="app__cards-container"
+      v-if="!loadErr"
+      :style="{ left: shift + 'px' }"
+    >
       <card v-for="(item, index) in locations" :key="index" :data="item" />
     </div>
     <button
-      class="app__button app__button_slide app__button_slide_forward"
+      class="app__button_slide_forward"
       @click="shift -= shiftStep"
       :disabled="Math.abs(shift) >= maxshift"
     >
-      <img class="app__icon" src="./assets/images/forward-icon.svg" alt />
+      <img
+        class="app__button-icon"
+        src="./assets/images/forward-icon.svg"
+        alt
+      />
     </button>
-    <button class="app__button app__button_config" @click="showConfig = true">
-      <img class="app__icon" src="./assets/images/config-icon.svg" alt />
+    <button class="app__button_config" @click="showConfig = true">
+      <img class="app__button-icon" src="./assets/images/config-icon.svg" alt />
     </button>
     <popup v-show="showConfig" @closePopup="closeConfig" />
   </div>
@@ -39,7 +47,7 @@ export default {
   components: {
     Card,
     Popup,
-    Loader
+    Loader,
   },
   data() {
     return {
@@ -48,7 +56,7 @@ export default {
       showConfig: false,
       shift: 20,
       shiftStep: 300,
-      maxWidth: 320
+      maxWidth: 320,
     };
   },
   computed: {
@@ -66,7 +74,7 @@ export default {
           this.$store.state.locations.length * this.shiftStep - this.maxWidth
         );
       }
-    }
+    },
   },
   methods: {
     closeConfig() {
@@ -77,29 +85,29 @@ export default {
       const data = this.$data;
       const store = this.$store;
 
-      const success = async function(position) {
+      const success = async function (position) {
         await store
           .dispatch("getWeatherByCoords", {
             lat: position.coords.latitude,
-            lon: position.coords.longitude
+            lon: position.coords.longitude,
           })
           .then(() => {
             data.loading = false;
           })
-          .catch(err => {
+          .catch((err) => {
             data.loading = false;
             data.loadErr = true;
             console.log(err);
           });
       };
 
-      const error = async function() {
+      const error = async function () {
         await store
           .dispatch("getWeatherByCoords", defaultCoords)
           .then(() => {
             data.loading = false;
           })
-          .catch(err => {
+          .catch((err) => {
             data.loading = false;
             data.loadErr = true;
             console.log(err);
@@ -113,7 +121,7 @@ export default {
       } else {
         navigator.geolocation.getCurrentPosition(success, error);
       }
-    }
+    },
   },
   created() {
     const IDs = JSON.parse(localStorage.getItem("cityIDs"));
@@ -126,7 +134,7 @@ export default {
         .then(() => {
           this.loading = false;
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           this.loadErr = true;
           console.log(err);
@@ -134,11 +142,13 @@ export default {
     } else {
       this.getWeatherForCurrentLocation();
     }
-  }
+  },
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "./src/assets/styles/_blocks";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   box-sizing: border-box;
@@ -163,41 +173,25 @@ export default {
   display: flex;
 }
 
-.app__button {
-  padding: 0;
-  background-color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.app__button:disabled {
-  opacity: 0;
-  z-index: -1;
-}
-
-.app__button_slide {
-  position: absolute;
-  top: 50%;
-  z-index: 1;
-}
-
 .app__button_slide_back {
+  @extend button-slide;
   left: 0;
 }
 
 .app__button_slide_forward {
+  @extend button-slide;
   right: 0;
 }
 
 .app__button_config {
+  @extend button;
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 2;
 }
 
-.app__icon {
-  width: 20px;
-  height: 20px;
+.app__button-icon {
+  @extend icon;
 }
 </style>
