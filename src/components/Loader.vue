@@ -3,7 +3,7 @@
 </template>
 
 <style lang="scss">
-@import "./src/assets/styles/_constants";
+@import "src/assets/styles/variables";
 
 @keyframes rotation {
   from {

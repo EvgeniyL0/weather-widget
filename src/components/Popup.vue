@@ -1,8 +1,8 @@
 <template>
   <div class="popup">
     <h1 class="popup__title">Settings</h1>
-    <button class="popup__button_close" @click="closePopup">
-      <img class="popup__button-icon" src="../assets/images/close-icon.svg" alt />
+    <button class="button_close" @click="closePopup">
+      <img class="icon_close" src="../assets/images/close-icon.svg" alt />
     </button>
     <cities-list :listItems="cities" @deleteItem="deleteLocation" />
     <form class="popup__form" @submit.prevent="addNewLocation">
@@ -11,8 +11,8 @@
         <input type="text" name="location" v-model="newCity" />
         <p v-if="notFound">City not found :(</p>
       </fieldset>
-      <button class="popup__button_submit" type="submit" :disabled="newCity === ''">
-        <img class="popup__button-icon" src="../assets/images/confirm-icon.svg" alt />
+      <button class="button_submit" type="submit" :disabled="newCity === ''">
+        <img class="icon_confirm" src="../assets/images/confirm-icon.svg" alt />
       </button>
     </form>
   </div>
@@ -30,15 +30,15 @@ export default {
       movingItem: "",
       movingIndex: "",
       targetItem: "",
-      targetIndex: "",
+      targetIndex: ""
     };
   },
   computed: {
     cities() {
-      return this.$store.state.locations.map((item) => {
+      return this.$store.state.locations.map(item => {
         return item.name;
       });
-    },
+    }
   },
   methods: {
     addNewLocation() {
@@ -48,7 +48,7 @@ export default {
         .then(() => {
           this.newCity = "";
         })
-        .catch((err) => {
+        .catch(err => {
           this.notFound = true;
           console.log(err);
         });
@@ -57,19 +57,19 @@ export default {
       this.$store.commit("deleteItem", index);
     },
     closePopup() {
-      const cityIDs = this.$store.state.locations.map((item) => {
+      const cityIDs = this.$store.state.locations.map(item => {
         return item.id;
       });
 
       localStorage.setItem("cityIDs", JSON.stringify(cityIDs));
       this.$emit("closePopup");
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-@import "./src/assets/styles/_blocks";
+@import "src/assets/styles/blocks/button", "src/assets/styles/blocks/icon";
 
 .popup {
   position: absolute;
@@ -82,12 +82,12 @@ export default {
 }
 
 .popup__title {
-    font-size: 16px;
-    font-weight: normal;
-    margin-left: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+  font-size: 16px;
+  font-weight: normal;
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 .popup__form {
   display: flex;
@@ -123,18 +123,22 @@ export default {
   }
 }
 
-.popup__button_close {
-  @extend button;
+.button_close {
+  @extend .button;
   position: absolute;
   top: 10px;
   right: 10px;
 }
 
-.popup__button_submit {
-  @extend button;
+.button_submit {
+  @extend .button;
 }
 
-.popup__button-icon {
-  @extend icon;
+.icon_close {
+  @extend .icon;
+}
+
+.icon_confirm {
+  @extend .icon;
 }
 </style>

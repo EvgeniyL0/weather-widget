@@ -1,10 +1,5 @@
 <template>
-  <ul
-    class="cities-list"
-    @drop="onDrop($event)"
-    @dragover.prevent
-    @dragenter.prevent
-  >
+  <ul class="cities-list" @drop="onDrop($event)" @dragover.prevent @dragenter.prevent>
     <li
       v-for="(item, index) in listItems"
       :key="index"
@@ -13,10 +8,8 @@
       draggable="true"
     >
       <span>{{ item }}</span>
-      <button class="cities-list__button"
-        @click="$emit('deleteItem', index)"
-      >
-        <img class="cities-list__button-icon" src="../assets/images/trash-icon.svg" alt />
+      <button class="button_delete" @click="$emit('deleteItem', index)">
+        <img class="icon_trash" src="../assets/images/trash-icon.svg" alt />
       </button>
     </li>
   </ul>
@@ -25,14 +18,14 @@
 <script>
 export default {
   props: {
-    listItems: Array,
+    listItems: Array
   },
   data() {
     return {
       movingItem: "",
       movingIndex: "",
       targetItem: "",
-      targetIndex: "",
+      targetIndex: ""
     };
   },
   methods: {
@@ -47,20 +40,20 @@ export default {
     onDrop(event) {
       this.$store.commit("changeItem", {
         index: this.movingIndex,
-        item: this.currentItem,
+        item: this.currentItem
       });
       this.$store.commit("changeItem", {
         index: this.currentIndex,
-        item: this.movingItem,
+        item: this.movingItem
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style lang="scss">
-@import "./src/assets/styles/_constants";
-@import "./src/assets/styles/_blocks";
+@import "src/assets/styles/blocks/button", "src/assets/styles/blocks/icon",
+  "src/assets/styles/variables";
 
 .cities-list {
   width: 80%;
@@ -86,12 +79,12 @@ export default {
   }
 }
 
-.cities-list__button {
-  @extend button;
+.button_delete {
+  @extend .button;
   background-color: $back-color;
 }
 
-.cities-list__button-icon {
-  @extend icon;
+.icon_trash {
+  @extend .icon;
 }
 </style>

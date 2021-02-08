@@ -1,34 +1,22 @@
 <template>
   <div id="app">
-    <button
-      class="app__button_slide_back"
-      @click="shift += shiftStep"
-      :disabled="shift == 20"
-    >
-      <img class="app__button-icon" src="./assets/images/back-icon.svg" alt />
+    <button class="button_slide_back" @click="shift += shiftStep" :disabled="shift == 20">
+      <img class="icon_back" src="./assets/images/back-icon.svg" alt />
     </button>
     <loader v-if="loading" />
     <p class="app__error-text" v-if="loadErr">Loading error :(</p>
-    <div
-      class="app__cards-container"
-      v-if="!loadErr"
-      :style="{ left: shift + 'px' }"
-    >
+    <div class="app__cards-container" v-if="!loadErr" :style="{ left: shift + 'px' }">
       <card v-for="(item, index) in locations" :key="index" :data="item" />
     </div>
     <button
-      class="app__button_slide_forward"
+      class="button_slide_forward"
       @click="shift -= shiftStep"
       :disabled="Math.abs(shift) >= maxshift"
     >
-      <img
-        class="app__button-icon"
-        src="./assets/images/forward-icon.svg"
-        alt
-      />
+      <img class="icon_forward" src="./assets/images/forward-icon.svg" alt />
     </button>
-    <button class="app__button_config" @click="showConfig = true">
-      <img class="app__button-icon" src="./assets/images/config-icon.svg" alt />
+    <button class="button_config" @click="showConfig = true">
+      <img class="icon_config" src="./assets/images/config-icon.svg" alt />
     </button>
     <popup v-show="showConfig" @closePopup="closeConfig" />
   </div>
@@ -47,7 +35,7 @@ export default {
   components: {
     Card,
     Popup,
-    Loader,
+    Loader
   },
   data() {
     return {
@@ -56,7 +44,7 @@ export default {
       showConfig: false,
       shift: 20,
       shiftStep: 300,
-      maxWidth: 320,
+      maxWidth: 320
     };
   },
   computed: {
@@ -74,7 +62,7 @@ export default {
           this.$store.state.locations.length * this.shiftStep - this.maxWidth
         );
       }
-    },
+    }
   },
   methods: {
     closeConfig() {
@@ -85,29 +73,29 @@ export default {
       const data = this.$data;
       const store = this.$store;
 
-      const success = async function (position) {
+      const success = async function(position) {
         await store
           .dispatch("getWeatherByCoords", {
             lat: position.coords.latitude,
-            lon: position.coords.longitude,
+            lon: position.coords.longitude
           })
           .then(() => {
             data.loading = false;
           })
-          .catch((err) => {
+          .catch(err => {
             data.loading = false;
             data.loadErr = true;
             console.log(err);
           });
       };
 
-      const error = async function () {
+      const error = async function() {
         await store
           .dispatch("getWeatherByCoords", defaultCoords)
           .then(() => {
             data.loading = false;
           })
-          .catch((err) => {
+          .catch(err => {
             data.loading = false;
             data.loadErr = true;
             console.log(err);
@@ -121,7 +109,7 @@ export default {
       } else {
         navigator.geolocation.getCurrentPosition(success, error);
       }
-    },
+    }
   },
   created() {
     const IDs = JSON.parse(localStorage.getItem("cityIDs"));
@@ -134,7 +122,7 @@ export default {
         .then(() => {
           this.loading = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.loadErr = true;
           console.log(err);
@@ -142,12 +130,12 @@ export default {
     } else {
       this.getWeatherForCurrentLocation();
     }
-  },
+  }
 };
 </script>
 
 <style lang="scss">
-@import "./src/assets/styles/_blocks";
+@import "src/assets/styles/blocks/button", "src/assets/styles/blocks/icon";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -173,25 +161,33 @@ export default {
   display: flex;
 }
 
-.app__button_slide_back {
-  @extend button-slide;
-  left: 0;
-}
-
-.app__button_slide_forward {
-  @extend button-slide;
-  right: 0;
-}
-
-.app__button_config {
-  @extend button;
+.button_config {
+  @extend .button;
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 2;
 }
 
-.app__button-icon {
-  @extend icon;
+.button_slide_back {
+  @extend .button_silde;
+  left: 0;
+}
+
+.button_slide_forward {
+  @extend .button_silde;
+  right: 0;
+}
+
+.icon_back {
+  @extend .icon;
+}
+
+.icon_forward {
+  @extend .icon;
+}
+
+.icon_config {
+  @extend .icon;
 }
 </style>
