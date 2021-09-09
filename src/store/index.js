@@ -14,14 +14,23 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    initStore(state, payload) {
+      state.locations = payload.slice();
+    },
     addItem(state, payload) {
       state.locations.push(payload);
+      localStorage.removeItem("copy");
+      localStorage.setItem("copy", JSON.stringify(state.locations));
     },
     changeItem(state, payload) {
       state.locations.splice(payload.index, 1, payload.item);
+      localStorage.removeItem("copy");
+      localStorage.setItem("copy", JSON.stringify(state.locations));
     },
     deleteItem(state, payload) {
       state.locations.splice(payload, 1);
+      localStorage.removeItem("copy");
+      localStorage.setItem("copy", JSON.stringify(state.locations));
     }
   },
   actions: {
@@ -49,7 +58,7 @@ export default new Vuex.Store({
           context.commit('addItem', data);
         })
     },
-    getWeatherByIDs(context, payload) {
+    /*getWeatherByIDs(context, payload) {
       return fetch(`https://api.openweathermap.org/data/2.5/group?id=${payload}&appid=${weatherAPI}&units=metric`)
         .then((res) => {
           if (res.ok) {
@@ -62,7 +71,7 @@ export default new Vuex.Store({
             context.commit('addItem', item);
           });
         })
-    }
+    }*/
   },
   modules: {
   }

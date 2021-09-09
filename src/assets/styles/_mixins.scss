@@ -1,0 +1,19 @@
+@mixin button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background-color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+@mixin button_slide {
+  @include button();
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  &:disabled {
+    opacity: 0;
+    z-index: -1;
+  }
+}

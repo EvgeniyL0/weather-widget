@@ -1,8 +1,19 @@
 <template>
   <div class="popup">
     <h1 class="popup__title">Settings</h1>
-    <button class="button_close" @click="closePopup">
-      <img class="icon_close" src="../assets/images/close-icon.svg" alt />
+    <button class="popup__button_close" @click="$emit('closePopup')">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 0 24 24"
+        width="24px"
+        fill="#000000"
+      >
+        <path d="M0 0h24v24H0V0z" fill="none" />
+        <path
+          d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+        />
+      </svg>
     </button>
     <cities-list :listItems="cities" @deleteItem="deleteLocation" />
     <form class="popup__form" @submit.prevent="addNewLocation">
@@ -11,8 +22,23 @@
         <input type="text" name="location" v-model="newCity" />
         <p v-if="notFound">City not found :(</p>
       </fieldset>
-      <button class="button_submit" type="submit" :disabled="newCity === ''">
-        <img class="icon_confirm" src="../assets/images/confirm-icon.svg" alt />
+      <button
+        class="popup__button_submit"
+        type="submit"
+        :disabled="newCity === ''"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 0 24 24"
+          width="24px"
+          fill="#000000"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7h-2z"
+          />
+        </svg>
       </button>
     </form>
   </div>
@@ -30,15 +56,15 @@ export default {
       movingItem: "",
       movingIndex: "",
       targetItem: "",
-      targetIndex: ""
+      targetIndex: "",
     };
   },
   computed: {
     cities() {
-      return this.$store.state.locations.map(item => {
+      return this.$store.state.locations.map((item) => {
         return item.name;
       });
-    }
+    },
   },
   methods: {
     addNewLocation() {
@@ -48,28 +74,19 @@ export default {
         .then(() => {
           this.newCity = "";
         })
-        .catch(err => {
+        .catch((err) => {
           this.notFound = true;
-          console.log(err);
         });
     },
     deleteLocation(index) {
       this.$store.commit("deleteItem", index);
     },
-    closePopup() {
-      const cityIDs = this.$store.state.locations.map(item => {
-        return item.id;
-      });
-
-      localStorage.setItem("cityIDs", JSON.stringify(cityIDs));
-      this.$emit("closePopup");
-    }
-  }
+  },
 };
 </script>
 
 <style lang="scss">
-@import "src/assets/styles/blocks/button", "src/assets/styles/blocks/icon";
+@import "src/assets/styles/_mixins";
 
 .popup {
   position: absolute;
@@ -123,22 +140,14 @@ export default {
   }
 }
 
-.button_close {
-  @extend .button;
+.popup__button_close {
+  @include button();
   position: absolute;
   top: 10px;
   right: 10px;
 }
 
-.button_submit {
-  @extend .button;
-}
-
-.icon_close {
-  @extend .icon;
-}
-
-.icon_confirm {
-  @extend .icon;
+.popup__button_submit {
+  @include button();
 }
 </style>

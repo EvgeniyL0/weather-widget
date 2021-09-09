@@ -20,7 +20,7 @@
   margin: 0;
   border: 2px solid $back-color;
   border-radius: 100%;
-  border-left-color: #d3d3d3;
+  border-left-color: #000;
   animation: rotation 1s linear infinite;
 }
 </style>
