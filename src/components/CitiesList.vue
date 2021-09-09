@@ -1,14 +1,38 @@
 <template>
-  <ul class="cities-list" @drop="onDrop($event)" @dragover.prevent @dragenter.prevent>
+  <ul
+    class="cities-list"
+    @drop="onDrop($event)"
+    @dragover.prevent
+    @dragenter.prevent
+  >
     <li
       v-for="(item, index) in listItems"
       :key="index"
+      :draggable="moveOn"
       @dragstart="onDragStart(item, index)"
       @dragover="onDragOver(item, index)"
-      draggable="true"
     >
+      <button
+        class="cities-list__button_hum"
+        @mousedown="moveOn = true"
+        @mouseup="moveOn = false"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 0 24 24"
+          width="24px"
+          fill="#000000"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+        </svg>
+      </button>
       <span>{{ item }}</span>
-      <button class="button_delete" @click="$emit('deleteItem', index)">
+      <button
+        class="cities-list__button_delete"
+        @click="$emit('deleteItem', index)"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
@@ -29,14 +53,15 @@
 <script>
 export default {
   props: {
-    listItems: Array
+    listItems: Array,
   },
   data() {
     return {
       movingItem: "",
       movingIndex: "",
-      targetItem: "",
-      targetIndex: ""
+      currentItem: "",
+      currentIndex: "",
+      moveOn: false,
     };
   },
   methods: {
@@ -51,20 +76,19 @@ export default {
     onDrop(event) {
       this.$store.commit("changeItem", {
         index: this.movingIndex,
-        item: this.currentItem
+        item: this.currentItem,
       });
       this.$store.commit("changeItem", {
         index: this.currentIndex,
-        item: this.movingItem
+        item: this.movingItem,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-@import "src/assets/styles/blocks/button", "src/assets/styles/blocks/icon",
-  "src/assets/styles/variables";
+@import "src/assets/styles/_mixins";
 
 .cities-list {
   width: 80%;
@@ -85,17 +109,17 @@ export default {
     padding-right: 5px;
     margin-bottom: 10px;
     border-radius: 2px;
-    background-color: $back-color;
-    cursor: move;
+    background-color: #f5f5f5;
   }
 }
 
-.button_delete {
-  @extend .button;
-  background-color: $back-color;
+.cities-list__button_hum,
+.cities-list__button_delete {
+  @include button();
+  background-color: #f5f5f5;
 }
 
-.icon_trash {
-  @extend .icon;
+.cities-list__button_hum {
+  cursor: move;
 }
 </style>

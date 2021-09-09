@@ -20,12 +20,19 @@
       <fieldset>
         <label for="location">Add location:</label>
         <input type="text" name="location" v-model="newCity" />
-        <p v-if="notFound">City not found :(</p>
+        <p
+          :class="[
+            'popup__warning-text',
+            { 'popup__warning-text_active': notFound },
+          ]"
+        >
+          City not found :(
+        </p>
       </fieldset>
       <button
         class="popup__button_submit"
         type="submit"
-        :disabled="newCity === ''"
+        :disabled="newCity === '' || searching"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,11 +59,8 @@ export default {
   data() {
     return {
       newCity: "",
+      searching: false,
       notFound: false,
-      movingItem: "",
-      movingIndex: "",
-      targetItem: "",
-      targetIndex: "",
     };
   },
   computed: {
@@ -69,13 +73,16 @@ export default {
   methods: {
     addNewLocation() {
       this.notFound = false;
+      this.searching = true;
       this.$store
         .dispatch("getWeatherByCity", this.newCity)
         .then(() => {
           this.newCity = "";
+          this.searching = false;
         })
         .catch((err) => {
           this.notFound = true;
+          this.searching = false;
         });
     },
     deleteLocation(index) {
@@ -109,7 +116,7 @@ export default {
 .popup__form {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   fieldset {
     display: flex;
     flex-direction: column;
@@ -118,12 +125,6 @@ export default {
     label {
       font-weight: normal;
       margin-bottom: 5px;
-    }
-    p {
-      margin-top: 5px;
-      margin-bottom: 0;
-      font-size: 14px;
-      text-align: center;
     }
   }
   input {
@@ -135,7 +136,7 @@ export default {
     border: 1px solid;
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 3px #1e90ff;
+      box-shadow: 0 0 0 2px #1e90ff;
     }
   }
 }
@@ -149,5 +150,17 @@ export default {
 
 .popup__button_submit {
   @include button();
+}
+
+.popup__warning-text {
+  margin-top: 5px;
+  margin-bottom: 0;
+  font-size: 14px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.popup__warning-text_active {
+  color: #000;
 }
 </style>
