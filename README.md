@@ -14,8 +14,8 @@
   
 3. Выполните команду: `$ npm run build`.  
   
-4. Для использования виджета вставьте элемент `<weather-widget></weather-widget>` в нужное место на своей странице, скопируйте и подключите скрипты:  
-`<script src="https://unpkg.com/vue"></script>`  
-`<script src="path/to/weather-widjet.js"></script>`  
-
 4. Для демонстрации работы виджета откройте файл `demo.html` в папке `dist` в каталоге проекта.  
+  
+5. Для использования виджета вставьте элемент `<weather-widget></weather-widget>` в нужное место на своей странице, скопируйте и подключите скрипты:  
+`<script src="https://unpkg.com/vue"></script>`  
+`<script src="path/to/weather-widjet.js"></script>`
