@@ -12,8 +12,8 @@ export default {
   store,
   name: "App",
   components: {
-    MainContainer,
-  },
+    MainContainer
+  }
 };
 </script>
 

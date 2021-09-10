@@ -3,8 +3,14 @@ const defaultCoords = {
   lat: "55.753215",
   lon: "37.622504"
 };
+const widgetWidth = 320;
+const sliderInitShift = 24;
+const sliderShiftStep = 300;
 
 export {
   weatherAPI,
-  defaultCoords
+  defaultCoords,
+  widgetWidth,
+  sliderInitShift,
+  sliderShiftStep
 }

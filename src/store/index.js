@@ -1,8 +1,8 @@
 import { weatherAPI } from "../assets/constants.js";
-import Vue from "vue"
-import Vuex from "vuex"
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -36,25 +36,25 @@ export default new Vuex.Store({
   actions: {
     getWeatherByCoords(context, payload) {
       return fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${payload.lat}&lon=${payload.lon}&appid=${weatherAPI}&units=metric`)
-        .then((res) => {
+        .then(res => {
           if (res.ok) {
             return res.json();
           }
           return Promise.reject(`${res.statusText}`);
         })
-        .then((data) => {
+        .then(data => {
           context.commit("addItem", data);
         })
     },
     getWeatherByCity(context, payload) {
       return fetch(`https://api.openweathermap.org/data/2.5/weather?q=${payload}&appid=${weatherAPI}&units=metric`)
-        .then((res) => {
+        .then(res => {
           if (res.ok) {
             return res.json();
           }
           return Promise.reject(`${res.statusText}`);
         })
-        .then((data) => {
+        .then(data => {
           context.commit("addItem", data);
         })
     }

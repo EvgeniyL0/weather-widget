@@ -25,15 +25,9 @@
             'popup__warning-text',
             { 'popup__warning-text_active': notFound },
           ]"
-        >
-          City not found :(
-        </p>
+        >City not found :(</p>
       </fieldset>
-      <button
-        class="popup__button_submit"
-        type="submit"
-        :disabled="newCity === '' || searching"
-      >
+      <button class="popup__button_submit" type="submit" :disabled="newCity === '' || searching">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
@@ -42,9 +36,7 @@
           fill="#000000"
         >
           <path d="M0 0h24v24H0V0z" fill="none" />
-          <path
-            d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7h-2z"
-          />
+          <path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7h-2z" />
         </svg>
       </button>
     </form>
@@ -60,15 +52,15 @@ export default {
     return {
       newCity: "",
       searching: false,
-      notFound: false,
+      notFound: false
     };
   },
   computed: {
     cities() {
-      return this.$store.state.locations.map((item) => {
+      return this.$store.state.locations.map(item => {
         return item.name;
       });
-    },
+    }
   },
   methods: {
     addNewLocation() {
@@ -80,15 +72,15 @@ export default {
           this.newCity = "";
           this.searching = false;
         })
-        .catch((err) => {
+        .catch(err => {
           this.notFound = true;
           this.searching = false;
         });
     },
     deleteLocation(index) {
       this.$store.commit("deleteItem", index);
-    },
-  },
+    }
+  }
 };
 </script>
 

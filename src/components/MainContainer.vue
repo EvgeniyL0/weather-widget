@@ -3,7 +3,7 @@
     <button
       class="main__button_slide_back"
       @click="shift += shiftStep"
-      :disabled="shift == 20"
+      :disabled="shift === initShift"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -13,18 +13,12 @@
         fill="#000000"
       >
         <path d="M0 0h24v24H0V0z" fill="none" opacity=".87" />
-        <path
-          d="M17.51 3.87L15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12l8.13-8.13z"
-        />
+        <path d="M17.51 3.87L15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12l8.13-8.13z" />
       </svg>
     </button>
     <loader v-if="loading" />
     <p class="main__error-text" v-if="loadErr">Loading error</p>
-    <div
-      class="main__cards-container"
-      v-if="!loadErr"
-      :style="{ left: shift + 'px' }"
-    >
+    <div class="main__cards-container" v-if="!loadErr" :style="{ left: shift + 'px' }">
       <card v-for="(item, index) in locations" :key="index" :data="item" />
     </div>
     <button
@@ -67,7 +61,12 @@
 </template>
 
 <script>
-import { defaultCoords } from "../assets/constants.js";
+import {
+  defaultCoords,
+  widgetWidth,
+  sliderInitShift,
+  sliderShiftStep
+} from "../assets/constants.js";
 import Card from "../components/Card.vue";
 import Popup from "../components/Popup.vue";
 import Loader from "../components/Loader.vue";
@@ -76,16 +75,17 @@ export default {
   components: {
     Card,
     Popup,
-    Loader,
+    Loader
   },
   data() {
     return {
       loading: false,
       loadErr: false,
       showConfig: false,
-      shift: 20,
-      shiftStep: 300,
-      maxWidth: 320,
+      initShift: sliderInitShift,
+      shift: sliderInitShift,
+      shiftStep: sliderShiftStep,
+      maxWidth: widgetWidth
     };
   },
   computed: {
@@ -93,45 +93,39 @@ export default {
       return this.$store.state.locations;
     },
     maxshift() {
-      if (document.documentElement.clientWidth < this.maxWidth) {
-        return (
-          this.$store.state.locations.length * this.shiftStep -
-          document.documentElement.clientWidth
-        );
-      }
       return (
         this.$store.state.locations.length * this.shiftStep - this.maxWidth
       );
-    },
+    }
   },
   methods: {
     closeConfig() {
       this.showConfig = false;
-      this.shift = 20;
+      this.shift = sliderInitShift;
     },
     getWeatherForCurrentLocation() {
-      const success = async function (position) {
+      const success = async function(position) {
         await this.$store
           .dispatch("getWeatherByCoords", {
             lat: position.coords.latitude,
-            lon: position.coords.longitude,
+            lon: position.coords.longitude
           })
           .then(() => {
             this.loading = false;
           })
-          .catch((err) => {
+          .catch(err => {
             this.loading = false;
             this.loadErr = true;
           });
       };
 
-      const error = async function () {
+      const error = async function() {
         await this.$store
           .dispatch("getWeatherByCoords", defaultCoords)
           .then(() => {
             this.loading = false;
           })
-          .catch((err) => {
+          .catch(err => {
             this.loading = false;
             this.loadErr = true;
           });
@@ -145,7 +139,7 @@ export default {
       } else {
         navigator.geolocation.getCurrentPosition(boundSucces, boundError);
       }
-    },
+    }
   },
   created() {
     const copy = localStorage.getItem("copy");
@@ -159,7 +153,7 @@ export default {
     } else {
       this.getWeatherForCurrentLocation();
     }
-  },
+  }
 };
 </script>
 

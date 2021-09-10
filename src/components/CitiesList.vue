@@ -1,10 +1,5 @@
 <template>
-  <ul
-    class="cities-list"
-    @drop="onDrop($event)"
-    @dragover.prevent
-    @dragenter.prevent
-  >
+  <ul class="cities-list" @drop="onDrop($event)" @dragover.prevent @dragenter.prevent>
     <li
       v-for="(item, index) in listItems"
       :key="index"
@@ -12,11 +7,7 @@
       @dragstart="onDragStart(item, index)"
       @dragover="onDragOver(item, index)"
     >
-      <button
-        class="cities-list__button_hum"
-        @mousedown="moveOn = true"
-        @mouseup="moveOn = false"
-      >
+      <button class="cities-list__button_hum" @mousedown="moveOn = true" @mouseup="moveOn = false">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
@@ -29,10 +20,7 @@
         </svg>
       </button>
       <span>{{ item }}</span>
-      <button
-        class="cities-list__button_delete"
-        @click="$emit('deleteItem', index)"
-      >
+      <button class="cities-list__button_delete" @click="$emit('deleteItem', index)">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
@@ -53,7 +41,7 @@
 <script>
 export default {
   props: {
-    listItems: Array,
+    listItems: Array
   },
   data() {
     return {
@@ -61,7 +49,7 @@ export default {
       movingIndex: "",
       currentItem: "",
       currentIndex: "",
-      moveOn: false,
+      moveOn: false
     };
   },
   methods: {
@@ -76,14 +64,14 @@ export default {
     onDrop(event) {
       this.$store.commit("changeItem", {
         index: this.movingIndex,
-        item: this.currentItem,
+        item: this.currentItem
       });
       this.$store.commit("changeItem", {
         index: this.currentIndex,
-        item: this.movingItem,
+        item: this.movingItem
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

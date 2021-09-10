@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target wc --name weather-widget",
+    "build": "vue-cli-service build --target wc --inline-vue --name weather-widget",
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
@@ -16,7 +16,6 @@
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "push-dir": "^0.4.1",
     "sass": "^1.32.6",
     "sass-loader": "10.1.1",
     "vue-template-compiler": "^2.6.11"
