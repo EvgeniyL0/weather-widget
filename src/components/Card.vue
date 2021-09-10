@@ -29,7 +29,7 @@ export default {
 <style lang="scss">
 .card {
   width: 276px;
-  padding-left: 20px;
+  padding-left: 24px;
   flex-shrink: 0;
 }
 

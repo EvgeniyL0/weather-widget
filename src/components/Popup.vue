@@ -1,7 +1,7 @@
 <template>
   <div class="popup">
     <h1 class="popup__title">Settings</h1>
-    <button class="popup__button_close" @click="$emit('closePopup')">
+    <button class="popup__button_close" @click="closePopup">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         height="24px"
@@ -79,6 +79,11 @@ export default {
     },
     deleteLocation(index) {
       this.$store.commit("deleteItem", index);
+    },
+    closePopup() {
+      this.newCity = "";
+      this.notFound = false;
+      this.$emit("closePopup");
     }
   }
 };
@@ -100,7 +105,7 @@ export default {
 .popup__title {
   font-size: 16px;
   font-weight: normal;
-  margin-left: 20px;
+  margin-left: 24px;
   margin-top: 10px;
   margin-bottom: 10px;
 }

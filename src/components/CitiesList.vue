@@ -7,7 +7,7 @@
       @dragstart="onDragStart(item, index)"
       @dragover="onDragOver(item, index)"
     >
-      <button class="cities-list__button_hum" @mousedown="moveOn = true" @mouseup="moveOn = false">
+      <button class="cities-list__button_hum" @mousedown="moveOn = true">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
@@ -62,6 +62,7 @@ export default {
       this.currentIndex = index;
     },
     onDrop(event) {
+      this.moveOn = false;
       this.$store.commit("changeItem", {
         index: this.movingIndex,
         item: this.currentItem
