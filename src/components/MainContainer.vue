@@ -17,7 +17,7 @@
       </svg>
     </button>
     <loader v-if="loading" />
-    <p class="main__error-text" v-if="loadErr">Loading error</p>
+    <p class="main__error-text" v-if="loadErr">{{ loadErr }}</p>
     <div class="main__cards-container" v-if="!loadErr" :style="{ left: shift + 'px' }">
       <card v-for="(item, index) in locations" :key="index" :data="item" />
     </div>
@@ -80,7 +80,7 @@ export default {
   data() {
     return {
       loading: false,
-      loadErr: false,
+      loadErr: "",
       showConfig: false,
       initShift: sliderInitShift,
       shift: sliderInitShift,
@@ -115,7 +115,7 @@ export default {
           })
           .catch(err => {
             this.loading = false;
-            this.loadErr = true;
+            this.loadErr = "Oops... Data could not be retrieved";
           });
       };
 
@@ -127,7 +127,7 @@ export default {
           })
           .catch(err => {
             this.loading = false;
-            this.loadErr = true;
+            this.loadErr = "Oops... Data could not be retrieved :(";
           });
       };
 
@@ -135,7 +135,7 @@ export default {
       const boundError = error.bind(this);
 
       if (!navigator.geolocation) {
-        console.log("Geolocation is not supported by your browser");
+        this.loadErr = "Geolocation is not supported by your browser";
       } else {
         navigator.geolocation.getCurrentPosition(boundSucces, boundError);
       }
@@ -171,7 +171,7 @@ export default {
 }
 
 .main__error-text {
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -187,6 +187,10 @@ export default {
   top: 10px;
   right: 10px;
   z-index: 2;
+  transition: 0.5s transform ease-in-out;
+  &:hover {
+    transform: rotate(45deg);
+  }
 }
 
 .main__button_slide_back {
