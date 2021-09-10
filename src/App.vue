@@ -21,7 +21,7 @@ export default {
 #app {
   font-family: "Source Sans Pro", sans-serif;
   box-sizing: border-box;
-  width: 320px;
+  width: 324px;
   height: 400px;
   background-color: #ffffff;
 }
