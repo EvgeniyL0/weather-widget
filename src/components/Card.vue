@@ -7,7 +7,8 @@
     </div>
     <div class="card__text">
       <p>
-        Feels like: {{ Math.round(data.main.feels_like) }}°C. {{ data.weather[0].main }},
+        Feels like: {{ Math.round(data.main.feels_like) }}°C.
+        {{ data.weather[0].main }},
         {{ data.weather[0].description }}
       </p>
       <p>Wind: {{ Math.round(data.wind.speed) }} meter/sec</p>
@@ -27,8 +28,8 @@ export default {
 
 <style lang="scss">
 .card {
-  width: 280px;
-  padding-left: 20px;
+  width: 276px;
+  padding-left: 24px;
   flex-shrink: 0;
 }
 
